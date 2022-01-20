@@ -1,23 +1,64 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './App.css';
 
+
 function App() {
+
+  const [value, setValue] = useState({
+    format: "text",
+    paras: 2,
+
+  });
+
+  const [response, setResponse] = useState("")
+
+
+
+  useEffect(() => {
+    const getText = async (value) => {
+      const { data } = await axios.post(`https://baconipsum.com/api/?type=all-meat&paras=${value.paras}&format=${value.format}`)
+      return data
+    }
+    getText(value).then(res => setResponse(res))
+  }, [value]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>React sample text generator app</h1>
+        <hr />
       </header>
+      <form onChange={
+        (e) => {
+          console.log(e.target.value)
+        }
+      }>
+        <input
+          type='number'
+          name='count'
+          value={value.paras}
+          onChange={(e) => {
+            setValue({
+              ...value,
+              paras: e.target.value
+            })
+          }} />
+
+        <select onChange={(e) => {
+          setValue({
+            ...value,
+            format: e.target.value
+          })
+        }}>
+          <option value="html">HTML</option>
+          <option value="text">TEXT</option>
+        </select>
+
+
+      </form>
+      <div className='text-area'>
+        {response}
+      </div>
     </div>
   );
 }
