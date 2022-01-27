@@ -50,8 +50,8 @@ function App() {
             format: e.target.value
           })
         }}>
-          <option value="html">HTML</option>
           <option value="text">TEXT</option>
+          <option value="html">HTML</option>
         </select>
 
 
